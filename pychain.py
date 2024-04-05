@@ -182,19 +182,18 @@ receiver = st.text_input("Receiver")
 # Add an input area where you can get a value for `amount` from the user.
 amount = st.number_input("Amount")
 
-# if st.button("Add Block"):
-#    prev_block = pychain.chain[-1]
-#    prev_block_hash = prev_block.hash_block()
 
+# Set Block Difficulty
 difficulty = st.sidebar.slider("Block Difficulty", 1, 5, 2)
 pychain.difficulty = difficulty
 
-if 'pychain' not in st.session_state: # if pychain not in session state it is the first time being run
+# Initialize PyChain if not in session state
+if 'pychain' not in st.session_state: 
     st.session_state['pychain'] = PyChain([], difficulty = difficulty)
     genesis_block = Block(record ="Genesis Block", creator_id=0)
     st.session_state['pychain'].add_block(genesis_block)
 
-
+# Add a New Block
 if st.button('Add Block'):
     prev_block = st.session_state['pychain'].difficulty = difficulty
     prev_block = st.session_state['pychain'].chain[-1]
@@ -222,6 +221,7 @@ if st.button('Add Block'):
     
 st.markdown("## The PyChain Ledger")
 
+# Block Inspector Sidebar View
 st.sidebar.write("# Block Inspector")
 selected_block = st.sidebar.selectbox(
     "Which block would you like to see?", pychain.chain
@@ -229,6 +229,7 @@ selected_block = st.sidebar.selectbox(
 
 st.sidebar.write(selected_block)
 
+#Validate Chain
 if st.button("Validate Chain"):
     st.write(pychain.is_valid())
 
