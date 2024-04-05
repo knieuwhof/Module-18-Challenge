@@ -142,13 +142,10 @@ class PyChain:
 # Streamlit Code
 
 # Adds the cache decorator for Streamlit
-
-
-@st.cache(allow_output_mutation=True)
+@st.cache_resource
 def setup():
     print("Initializing Chain")
     return PyChain([Block("Genesis", 0)])
-
 
 st.markdown("# PyChain")
 st.markdown("## Store a Transaction Record in the PyChain")
@@ -171,52 +168,64 @@ pychain = setup()
 
 # @TODO:
 # Delete the `input_data` variable from the Streamlit interface.
-input_data = st.text_input("Block Data")
+# input_data = st.text_input("Block Data")
 
 # @TODO:
 # Add an input area where you can get a value for `sender` from the user.
-# YOUR CODE HERE
+sender = st.text_input("Sender")
 
 # @TODO:
 # Add an input area where you can get a value for `receiver` from the user.
-# YOUR CODE HERE
+receiver = st.text_input("Receiver")
 
 # @TODO:
 # Add an input area where you can get a value for `amount` from the user.
-# YOUR CODE HERE
+amount = st.number_input("Amount")
 
-if st.button("Add Block"):
-    prev_block = pychain.chain[-1]
+# if st.button("Add Block"):
+#    prev_block = pychain.chain[-1]
+#    prev_block_hash = prev_block.hash_block()
+
+difficulty = st.sidebar.slider("Block Difficulty", 1, 5, 2)
+pychain.difficulty = difficulty
+
+if 'pychain' not in st.session_state: # if pychain not in session state it is the first time being run
+    st.session_state['pychain'] = PyChain([], difficulty = difficulty)
+    genesis_block = Block(record ="Genesis Block", creator_id=0)
+    st.session_state['pychain'].add_block(genesis_block)
+
+
+if st.button('Add Block'):
+    prev_block = st.session_state['pychain'].difficulty = difficulty
+    prev_block = st.session_state['pychain'].chain[-1]
     prev_block_hash = prev_block.hash_block()
 
     # @TODO
     # Update `new_block` so that `Block` consists of an attribute named `record`
     # which is set equal to a `Record` that contains the `sender`, `receiver`,
     # and `amount` values
+
+    new_record = Record(sender=sender, receiver= receiver, amount=amount)
     new_block = Block(
-        data=input_data,
+        record = new_record,
         creator_id=42,
         prev_hash=prev_block_hash
     )
-
-    pychain.add_block(new_block)
+    st.session_state['pychain'].add_block(new_block)
     st.balloons()
+
+    pychain_df = pd.DataFrame(st.session_state['pychain'].chain)
+    st.write(pychain_df)
 
 ################################################################################
 # Streamlit Code (continues)
-
+    
 st.markdown("## The PyChain Ledger")
-
-pychain_df = pd.DataFrame(pychain.chain).astype(str)
-st.write(pychain_df)
-
-difficulty = st.sidebar.slider("Block Difficulty", 1, 5, 2)
-pychain.difficulty = difficulty
 
 st.sidebar.write("# Block Inspector")
 selected_block = st.sidebar.selectbox(
     "Which block would you like to see?", pychain.chain
-)
+    )
 
 st.sidebar.write(selected_block)
 
