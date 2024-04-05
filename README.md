@@ -2,9 +2,7 @@
 
 ![alt=""](Images/application-image.png)
 
-You’re a fintech engineer who’s working at one of the five largest banks in the world. You were recently promoted to act as the lead developer on their decentralized finance team. Your task is to build a blockchain-based ledger system, complete with a user-friendly web interface. This ledger should allow partner banks to conduct financial transactions (that is, to transfer money between senders and receivers) and to verify the integrity of the data in the ledger.
-
-## Summary of Streamlit application
+## Summary of Streamlit Application
 
 The application provides a user interface to interact with a blockchain ledger called PyChain. This ledger is implemented using a series of blocks, where each block contains transaction records. It defines a Record data class representing individual transactions where each transaction includes sender, receiver, and amount attributes. It also defines a Block data class representing a block in the blockchain. Each block contains a record (transaction), along with other attributes like creator ID, previous hash, timestamp, and nonce. This class represents the blockchain itself and also includes methods for adding blocks to the chain, performing proof of work for mining new blocks, and validating the blockchain. The blocks are hashed using SHA-256. 
 
@@ -14,6 +12,6 @@ Overall, the PyChain ledger Streamlit application provides a user-friendly inter
 
 Below are picture demonstrations of the interface, displaying a blockchain consisting of several blocks and confirmation that the blockchain is valid.
 
-!(Images/Streamlit.png)
+![alt=""](Images/Streamlit.png)
 
-!(Images/Validate.png)
+![alt=""](Images/Validate.png)
